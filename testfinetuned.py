@@ -24,8 +24,6 @@ parser.add_argument('--finetune', default='', type=str, metavar='PATH',
                     help='path to the model (default: none)')
 parser.add_argument('--pruned', default='', type=str, metavar='PATH',
                     help='path to the model (default: none)')
-parser.add_argument('--save', default='', type=str, metavar='PATH',
-                    help='path to save pruned model (default: none)')
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
@@ -61,9 +59,6 @@ def test(model):
         correct, len(test_loader.dataset), 100. * correct / len(test_loader.dataset), time_end-time_start))
     return correct / float(len(test_loader.dataset))
 
-if not os.path.exists(args.save):
-    os.makedirs(args.save)
-
 if args.pruned:
     if os.path.isfile(args.pruned):
         print("=> loading checkpoint '{}'".format(args.pruned))
@@ -72,7 +67,7 @@ if args.pruned:
         if args.cuda:
             model.cuda()
         print("=> loaded checkpoint '{}'"
-              .format(args.model))
+              .format(args.pruned))
     else:
         print("=> no checkpoint found")
 
